@@ -15,7 +15,12 @@
 #define WALLET_H
 
 class Wallet {
-  
+/*
+  unsigned int numOfCategories;
+
+public:
+    Wallet();
+*/
 };
 
 #endif // WALLET_H

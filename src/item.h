@@ -22,14 +22,11 @@ class Item {
 
    std::string ident;
    std::unordered_map<std::string, std::string> entries;
-   unsigned int count;
    //std::string key;
    //std::string value;
 
 public:
     Item(std::string ident);
-
-
     unsigned int size();
     bool empty();
     void setIdent(std::string ident);
@@ -37,7 +34,8 @@ public:
     bool addEntry(std::string key, std::string value);
     std::string getEntry(std::string key) const;
     bool deleteEntry(std::string key);
-
+    std::vector<std::string> getKeys() const;
+    bool friend operator==(const Item& lhs, const Item& rhs);
 };
 
 #endif // ITEM_H

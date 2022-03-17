@@ -7,12 +7,13 @@
 // Canvas: https://canvas.swansea.ac.uk/courses/24793
 // -----------------------------------------------------
 #include <stdexcept>
+#include <vector>
 #include "item.h"
 
 
 // TODO Write a constructor that takes one parameter, a string identifier
 //  and initialises the object and member data.
-Item::Item(std::string ident) : ident(ident), count(0){}
+Item::Item(std::string ident) : ident(ident){}
 //
 // Example:
 //  Item iObj{"identIdent"};
@@ -25,7 +26,7 @@ Item::Item(std::string ident) : ident(ident), count(0){}
 //  auto size = iObj.size();
 
 unsigned int Item::size(){
-    return count;
+    return this->entries.size();
 }
 
 // TODO Write a function, empty, that takes no parameters and returns true
@@ -72,7 +73,6 @@ std::string Item::getIdent() const{
 bool Item::addEntry(std::string key, std::string value) {
     if(this->entries.find(key) == this->entries.end()){ //if the key does not exist
         this->entries.insert(std::pair<std::string, std::string>(key, value));
-        this->count++;
         return true;
     } else {
         this->entries.erase(key);
@@ -113,9 +113,16 @@ bool Item::deleteEntry(std::string key){
         return false;
     } else{
         this->entries.erase(key);
-        this->count--;
         return true;
     }
+}
+
+std::vector<std::string> Item::getKeys() const{
+    std::vector<std::string> keys;
+    for(auto it: entries){
+        keys.push_back(it.first);
+    }
+    return keys;
 }
 
 // TODO Write an == operator overload for the Item class, such that two
@@ -129,6 +136,14 @@ bool Item::deleteEntry(std::string key){
 //  if(iObj1 == iObj2) {
 //    ...
 //  }
+bool operator==(const Item& lhs, const Item& rhs){
+    if((lhs.ident == rhs.ident) && (lhs.entries == rhs.entries)){
+        return true;
+    } else{
+        return false;
+    }
+}
+
 
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Item.

@@ -8,12 +8,14 @@
 // -----------------------------------------------------
 
 #include "wallet.h"
-
+/*
 // TODO Write a Wallet constructor that takes no parameters and constructs an
 //  empty wallet.
 //
 // Example:
 //  Wallet wObj{};
+
+Wallet::Wallet();
 
 // TODO Write a function, size, that takes no parameters and returns an unsigned
 //  int of the number of categories in the Wallet contains.
@@ -21,6 +23,9 @@
 // Example:
 //  Wallet wObj{};
 //  auto size = wObj.size();
+unsigned int Wallet::size(){
+    return numOfCategories;
+}
 
 // TODO Write a function, empty, that takes no parameters and returns true
 //  if the number of categories in the Wallet is zero, false otherwise.
@@ -28,6 +33,10 @@
 // Example:
 //  Wallet wwObj{};
 //  auto isEmpty = wObj.empty();
+
+bool Wallet::empty(){
+    return(size() == 0);
+}
 
 // TODO Write a function, newCategory, that takes one parameter, a category
 //  identifier, and returns the Category object as a reference. If an object
@@ -157,3 +166,4 @@
 // Example:
 //  Wallet wObj{};
 //  std::string s = wObj.str();
+*/

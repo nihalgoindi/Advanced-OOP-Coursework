@@ -75,6 +75,8 @@ bool Item::addEntry(std::string key, std::string value) {
         this->count++;
         return true;
     } else {
+        this->entries.erase(key);
+        this->entries.insert(std::pair<std::string, std::string>(key, value));
         return false;
     }
 

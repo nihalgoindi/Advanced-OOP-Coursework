@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 #include "item.h"
+#include "lib_json.hpp"
+using json = nlohmann::json;
 
 #ifndef CATEGORY_H
 #define CATEGORY_H
@@ -30,6 +32,8 @@ public:
     bool addItem(Item item);
     Item& getItem(std::string itemIdent); //could be const - come back to it later
     bool deleteItem(std::string itemIdent);
+    std::vector<Item> getItems();
+    friend void to_json(json& j, const Category& c);
     friend bool operator==(const Category& lhs, const Category& rhs);
 };
 

@@ -78,7 +78,6 @@ Item& Category::newItem(std::string itemIdent){
         }
     }
     try{
-        //Item item(itemIdent);
         itemsVector.push_back(Item(itemIdent));
         return this->itemsVector[this->itemsVector.size() -1];
     } catch(const std::exception& ex){
@@ -150,6 +149,22 @@ bool Category::deleteItem(std::string itemIdent){
         }
     }
     throw std::out_of_range("Out of Range");
+}
+
+std::vector<Item> Category::getItems(){
+    return this->itemsVector;
+}
+
+void to_json(json& j, const Category& c){
+    json items;
+    for(auto it = c.itemsVector.begin(); it != c.itemsVector.end(); it++) {
+        items += *it; //makes aray
+    }
+    //std::string s = items.dump();
+    //std::string ns = s.substr(1, s.length() - 2);
+    //items = json::parse(ns);
+    j = json{{c.ident,items}}; //returns catgeory
+    
 }
 
 // TODO Write an == operator overload for the Category class, such that two

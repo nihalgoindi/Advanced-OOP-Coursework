@@ -125,6 +125,16 @@ std::vector<std::string> Item::getKeys() const{
     return keys;
 }
 
+void to_json(json& j, const Item& i){
+    json entries;
+    for(auto it = i.entries.begin(); it != i.entries.end(); it++) {
+        entries[it->first] = it->second;
+    }
+    j = json{{i.ident,entries}};
+}
+
+
+
 // TODO Write an == operator overload for the Item class, such that two
 //  Item objects are equal only if they have the same identifier and same
 //  entries.

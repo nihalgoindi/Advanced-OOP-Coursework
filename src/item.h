@@ -14,6 +14,8 @@
 // -----------------------------------------------------
 #include <string>
 #include <unordered_map>
+#include "lib_json.hpp"
+using json = nlohmann::json;
 
 #ifndef ITEM_H
 #define ITEM_H
@@ -35,6 +37,7 @@ public:
     std::string getEntry(std::string key) const;
     bool deleteEntry(std::string key);
     std::vector<std::string> getKeys() const;
+    friend void to_json(json& j, const Item& i);
     bool friend operator==(const Item& lhs, const Item& rhs);
 };
 

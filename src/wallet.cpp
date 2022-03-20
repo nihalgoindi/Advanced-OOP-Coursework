@@ -259,12 +259,7 @@ bool operator==(const Wallet& lhs, const Wallet& rhs){
 //  std::string s = wObj.str();
 
 std::string Wallet::str(){
-    std::string s = ((json) *this).dump();
-    std::ofstream file;
-    file.open("test.txt");
-    file << s;
-    file.close();
-    return s;
+    return ((json) *this).dump();
 }
 
 void to_json(json& j, const Wallet& w){

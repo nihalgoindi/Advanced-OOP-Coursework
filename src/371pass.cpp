@@ -192,7 +192,10 @@ std::string App::getJSON(Wallet &wObj) {
 //  std::cout << getJSON(wObj, c);
 std::string App::getJSON(Wallet &wObj, const std::string &c) {
   //return "{}";
-  return wObj.getCategory(c).str();
+  json j = wObj.getCategory(c);
+  auto it = j.begin();
+  return it.value().dump();
+  
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -211,7 +214,9 @@ std::string App::getJSON(Wallet &wObj, const std::string &c) {
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i) {
    //return "{}";
-   return wObj.getCategory(c).getItem(i).str();
+   json j = wObj.getCategory(c).getItem(i);
+   auto it = j.begin();
+   return it.value().dump();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -231,5 +236,8 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i, const std::string &e) {
   //return "{}";
-  return wObj.getCategory(c).getItem(i).getEntry(e);
+  
+  json j = wObj.getCategory(c).getItem(i).getEntry(e);
+  auto it = j.begin();
+  return it.value().dump();
 }

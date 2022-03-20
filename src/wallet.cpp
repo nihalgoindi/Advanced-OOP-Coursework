@@ -77,19 +77,23 @@ Category& Wallet::newCategory(std::string categoryIdent){
 //  wObj.addCategory(cObj);
 
 bool Wallet::addCategory(Category category){
-    for (size_t i = 0; i < this->categories.size(); i++){
-        if(this->categories[i].getIdent() == category.getIdent()){
-            //merge contents;
-            std::vector<Item> items = category.getItems();
-            for(size_t j = 0; j < items.size(); j++){
-                this->categories[i].addItem(items.at(j));
+    try{
+        for (size_t i = 0; i < this->categories.size(); i++){
+            if(this->categories[i].getIdent() == category.getIdent()){
+                //merge contents;
+                std::vector<Item> items = category.getItems();
+                for(size_t j = 0; j < items.size(); j++){
+                    this->categories[i].addItem(items.at(j));
+                }
+                return false;
             }
-            return false;
         }
+        //insert new category
+        this->categories.push_back(category);
+        return true;
+    } catch(std::exception &ex){
+        throw std::runtime_error("Runtime Error");
     }
-    //insert new category
-    this->categories.push_back(category);
-    return true;
 }
 
 

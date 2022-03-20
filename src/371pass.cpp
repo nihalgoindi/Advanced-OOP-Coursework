@@ -54,8 +54,27 @@ int App::run(int argc, char *argv[]) {
   const Action a = parseActionArgument(args);
   switch (a) {
   case Action::CREATE:
-    throw std::runtime_error("create not implemented");
-    break;
+    if(args.count("category") && args.count("item") && args.count("entry")) {
+      //entry filter
+      Category _c(args["category"].as<std::string>());
+      Item _i(args["item"].as<std::string>());
+      std::string _e = args["entry"].as<std::string>();
+      std::string delimiter = ",";
+      std::string _key;
+      std::string _value;
+    
+      size_t pos = _e.find(delimiter);
+      _key = _e.substr(0, pos);
+      _value = _e.substr(pos + 1, _e.length()-1);
+      _i.addEntry(_key, _value);
+      _c.addItem(_i);
+      wObj.addCategory(_c);
+
+    } else{
+        std::cerr << "Error: missing category, item or entry argument(s)." << std::endl;
+        return 1;
+    }
+    break;  
 
   case Action::READ:
     if(!args.count("category") && !args.count("item") && !args.count("entry")) {

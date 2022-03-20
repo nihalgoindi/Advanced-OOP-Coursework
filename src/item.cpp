@@ -93,7 +93,7 @@ bool Item::addEntry(std::string key, std::string value) {
 
 std::string Item::getEntry(std::string key) const{
     if(this->entries.find(key) == this->entries.end()){
-        throw std::out_of_range("Error: invalid entry argument(s)");
+        throw std::out_of_range("Error: invalid entry argument(s).");
     } else{
         return this->entries.at(key);
     }
@@ -110,7 +110,7 @@ std::string Item::getEntry(std::string key) const{
 
 bool Item::deleteEntry(std::string key){
      if(this->entries.find(key) == this->entries.end()){
-         throw std::out_of_range("Error: invalid entry argument(s)");
+         throw std::out_of_range("Error: invalid entry argument(s).");
          return false;
     } else{
         this->entries.erase(key);

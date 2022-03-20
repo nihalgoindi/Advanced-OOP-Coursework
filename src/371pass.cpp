@@ -63,6 +63,7 @@ int App::run(int argc, char *argv[]) {
         std::cout << getJSON(wObj) << std::endl;
       } catch(std::exception& ex){
         std::cerr << ex.what() << std::endl;
+        return 1;
       }
     } else if(args.count("category") && args.count("item") && args.count("entry")) {
       //entry filter
@@ -70,12 +71,15 @@ int App::run(int argc, char *argv[]) {
         std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>(), args["entry"].as<std::string>()) << std::endl;
       } catch(std::exception& ex){
         std::cerr << ex.what() << std::endl;
+        return 1;
       }
     } else if(args.count("entry")){
         if(args.count("category")){
           std::cerr << "Error: missing item argument(s)." << std::endl;
+          return 1;
         } else {
           std::cerr << "Error: missing category argument(s)." << std::endl;
+          return 1;
         }
     } else if(args.count("item")){
         if(args.count("category")){
@@ -83,18 +87,22 @@ int App::run(int argc, char *argv[]) {
             std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>()) << std::endl;
           } catch(std::exception& ex){
             std::cerr << ex.what() << std::endl;
+            return 1;
           }
         } else{
           std::cerr << "Error: missing category argument(s)." << std::endl;
+          return 1;
         }
     } else if(args.count("category")){
         try{
           std::cout << getJSON(wObj, args["category"].as<std::string>()) << std::endl;
         } catch(std::exception& ex){
           std::cerr << ex.what() << std::endl;
+          return 1;
         }
     } else{
         std::cerr << "Error: Invalid arguments somewhere." << std::endl;
+        return 1;
     }
     break;
 

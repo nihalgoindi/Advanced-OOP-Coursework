@@ -129,7 +129,7 @@ Item& Category::getItem(std::string itemIdent) {
             return this->itemsVector.at(i);
         }
     }
-    throw std::out_of_range("Error: invalid item argument(s)");
+    throw std::out_of_range("Error: invalid item argument(s).");
 }
 
 // TODO Write a function, deleteItem, that takes one parameter, an Item
@@ -148,7 +148,7 @@ bool Category::deleteItem(std::string itemIdent){
             return true;
         }
     }
-    throw std::out_of_range("Error: invalid item argument(s)");
+    throw std::out_of_range("Error: invalid item argument(s).");
 }
 
 std::vector<Item> Category::getItems(){

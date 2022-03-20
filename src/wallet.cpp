@@ -108,7 +108,7 @@ Category& Wallet::getCategory(std::string categoryIdent) {
             return this->categories.at(i);
         }
     }
-    throw std::out_of_range("Error: invalid category argument(s)");
+    throw std::out_of_range("Error: invalid category argument(s).");
 }
 
 // TODO Write a function, deleteCategory, that takes one parameter, a Category
@@ -127,7 +127,7 @@ bool Wallet::deleteCategory(std::string categoryIdent){
             return true;
         }
     }
-    throw std::out_of_range("Error: invalid category argument(s)");
+    throw std::out_of_range("Error: invalid category argument(s).");
 }
 
 // TODO Write a function, load, that takes one parameter, a std::string,

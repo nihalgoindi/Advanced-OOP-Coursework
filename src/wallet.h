@@ -32,6 +32,7 @@ public:
   void save(std::string filePath);
   friend void to_json(json& j, const Wallet& w);
   friend bool operator==(const Wallet& lhs, const Wallet& rhs);
+  std::string str();
 };
 
 #endif // WALLET_H

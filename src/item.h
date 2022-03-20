@@ -39,6 +39,7 @@ public:
     std::vector<std::string> getKeys() const;
     friend void to_json(json& j, const Item& i);
     bool friend operator==(const Item& lhs, const Item& rhs);
+    std::string str();
 };
 
 #endif // ITEM_H

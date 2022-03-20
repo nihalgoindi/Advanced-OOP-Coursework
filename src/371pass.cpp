@@ -58,7 +58,17 @@ int App::run(int argc, char *argv[]) {
     break;
 
   case Action::READ:
-    throw std::runtime_error("read not implemented");
+    if(!args.count("category") && !args.count("item") && !args.count("entry")) {
+      std::cout << wObj.str() << std::endl;
+    } else if(args.count("category") && args.count("item") && args.count("entry")) {
+      //entry filter
+    } else if(args.count("category") && args.count("item")) {
+      //item filter
+    } else if(args.count("category")) {
+      //category filter
+    } else {
+      //invalid
+    }
     break;
 
   case Action::UPDATE:

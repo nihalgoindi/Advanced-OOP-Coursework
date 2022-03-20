@@ -125,13 +125,7 @@ std::vector<std::string> Item::getKeys() const{
     return keys;
 }
 
-void to_json(json& j, const Item& i){
-    json entries;
-    for(auto it = i.entries.begin(); it != i.entries.end(); it++) {
-        entries[it->first] = it->second;
-    }
-    j = json{{i.ident,entries}};
-}
+
 
 
 
@@ -155,6 +149,7 @@ bool operator==(const Item& lhs, const Item& rhs){
 }
 
 
+
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Item.
 //
@@ -163,3 +158,15 @@ bool operator==(const Item& lhs, const Item& rhs){
 // Example:
 //  Item iObj{"itemIdent"};
 //  std::string s = iObj.str();
+
+std::string Item::str(){
+    return ((json) *this).dump();
+}
+
+void to_json(json& j, const Item& i){
+    json entries;
+    for(auto it = i.entries.begin(); it != i.entries.end(); it++) {
+        entries[it->first] = it->second;
+    }
+    j = json{{i.ident,entries}};
+}

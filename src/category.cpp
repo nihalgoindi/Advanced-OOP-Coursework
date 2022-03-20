@@ -155,17 +155,6 @@ std::vector<Item> Category::getItems(){
     return this->itemsVector;
 }
 
-void to_json(json& j, const Category& c){
-    json items;
-    for(auto it = c.itemsVector.begin(); it != c.itemsVector.end(); it++) {
-        items += *it; //makes aray
-    }
-    //std::string s = items.dump();
-    //std::string ns = s.substr(1, s.length() - 2);
-    //items = json::parse(ns);
-    j = json{{c.ident,items}}; //returns catgeory
-    
-}
 
 // TODO Write an == operator overload for the Category class, such that two
 //  Category objects are equal only if they have the same identifier and same
@@ -186,6 +175,7 @@ bool operator==(const Category& lhs, const Category& rhs){
     }
 }
 
+
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Category.
 //
@@ -195,3 +185,22 @@ bool operator==(const Category& lhs, const Category& rhs){
 //  Category cObj{"categoryIdent"};
 //  std::string s = cObj.str();
 
+std::string Category::str(){
+    return ((json) *this).dump();
+}
+
+void to_json(json& j, const Category& c){
+    json items = json::object();
+    for(auto it = c.itemsVector.begin(); it != c.itemsVector.end(); it++) {
+        //items.push_back(*it);
+        json tmp = *it; //load the item in json (returns json::object)
+        for(auto it2 = tmp.begin(); it2 != tmp.end(); it2++) {
+            items[c.ident][it2.key()] = it2.value();
+        }
+    }
+    //std::string s = items.dump();
+    //std::string ns = s.substr(1, s.length() - 2);
+    //items = json::parse(ns);
+    //j = json{{c.ident,items}}; //adds category
+    j = items;  
+}

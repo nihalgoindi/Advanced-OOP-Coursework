@@ -224,21 +224,11 @@ void Wallet::load(std::string dbName){
 void Wallet::save(std::string filePath){
     json j = *this;
     std::ofstream o(filePath);
-    o << std::setw(4) << j << std::endl;
+    o << j << std::endl;
     o.close();
 }
 
-void to_json(json& j, const Wallet& w){
-    for(auto it = w.categories.begin(); it != w.categories.end(); it++) {
-        j.push_back(*it);
-    }    
-    std::string s = j.dump();
-    //std::ofstream out("output.txt");
-    std::string ns = s.substr(1, s.length() - 2);
-    //out << "s:"<< "\n" << s << "\n" << "ns:" << "\n" << ns;
-   // out.close();
-    j = json::parse(s);
-}
+
 
 // TODO Write an == operator overload for the Wallet class, such that two
 //  Wallet objects are equal only if they have the exact same data.
@@ -267,3 +257,23 @@ bool operator==(const Wallet& lhs, const Wallet& rhs){
 // Example:
 //  Wallet wObj{};
 //  std::string s = wObj.str();
+
+std::string Wallet::str(){
+    std::string s = ((json) *this).dump();
+    std::ofstream file;
+    file.open("test.txt");
+    file << s;
+    file.close();
+    return s;
+}
+
+void to_json(json& j, const Wallet& w){
+    json cats = json::object();
+    for(auto it = w.categories.begin(); it != w.categories.end(); it++) {
+        json tmp = *it;
+        for(auto it2 = tmp.begin(); it2 != tmp.end(); it2++) {
+            cats[it2.key()] = it2.value();
+        }
+    }
+    j = cats;
+}

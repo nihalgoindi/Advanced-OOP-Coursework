@@ -35,6 +35,7 @@ public:
     std::vector<Item> getItems();
     friend void to_json(json& j, const Category& c);
     friend bool operator==(const Category& lhs, const Category& rhs);
+    std::string str();
 };
 
 #endif // CATEGORY_H

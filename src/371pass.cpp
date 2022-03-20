@@ -59,15 +59,26 @@ int App::run(int argc, char *argv[]) {
 
   case Action::READ:
     if(!args.count("category") && !args.count("item") && !args.count("entry")) {
-      std::cout << wObj.str() << std::endl;
+      std::cout << getJSON(wObj) << std::endl;
     } else if(args.count("category") && args.count("item") && args.count("entry")) {
       //entry filter
-    } else if(args.count("category") && args.count("item")) {
-      //item filter
-    } else if(args.count("category")) {
-      //category filter
-    } else {
-      //invalid
+      std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>(), args["entry"].as<std::string>()) << std::endl;
+    } else if(args.count("entry")){
+        if(args.count("category")){
+          throw std::invalid_argument("Error: missing item argument(s).");
+        } else {
+          throw std::invalid_argument("Error: missing category argument(s).");
+        }
+    } else if(args.count("item")){
+        if(args.count("category")){
+          std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>()) << std::endl;
+        } else{
+          throw std::invalid_argument("Error: missing category argument(s).");
+        }
+    } else if(args.count("category")){
+        std::cout << getJSON(wObj, args["category"].as<std::string>()) << std::endl;
+    } else{
+        throw std::invalid_argument("Invalid arguments idk wtf has happened lmao");
     }
     break;
 
@@ -163,9 +174,8 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
 //  Wallet wObj{};
 //  std::cout << getJSON(wObj);
 std::string App::getJSON(Wallet &wObj) { 
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // return wObj.str();
+  //return "{}";
+  return wObj.str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -181,10 +191,8 @@ std::string App::getJSON(Wallet &wObj) {
 //  std::string c = "category argument value";
 //  std::cout << getJSON(wObj, c);
 std::string App::getJSON(Wallet &wObj, const std::string &c) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // return cObj.str();
+  //return "{}";
+  return wObj.getCategory(c).str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -202,11 +210,8 @@ std::string App::getJSON(Wallet &wObj, const std::string &c) {
 //  std::cout << getJSON(wObj, c, i);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // const auto iObj = cObj.getItem(i);
-  // return iObj.str();
+   //return "{}";
+   return wObj.getCategory(c).getItem(i).str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -225,9 +230,6 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
 //  std::cout << getJSON(wObj, c, i, e);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i, const std::string &e) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // auto iObj = cObj.getItem(i);
-  // return iObj.getEntry(e);
+  //return "{}";
+  return wObj.getCategory(c).getItem(i).getEntry(e);
 }

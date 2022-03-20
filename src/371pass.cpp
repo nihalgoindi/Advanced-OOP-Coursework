@@ -59,26 +59,42 @@ int App::run(int argc, char *argv[]) {
 
   case Action::READ:
     if(!args.count("category") && !args.count("item") && !args.count("entry")) {
-      std::cout << getJSON(wObj) << std::endl;
+      try{
+        std::cout << getJSON(wObj) << std::endl;
+      } catch(std::exception& ex){
+        std::cerr << ex.what() << std::endl;
+      }
     } else if(args.count("category") && args.count("item") && args.count("entry")) {
       //entry filter
-      std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>(), args["entry"].as<std::string>()) << std::endl;
+      try{
+        std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>(), args["entry"].as<std::string>()) << std::endl;
+      } catch(std::exception& ex){
+        std::cerr << ex.what() << std::endl;
+      }
     } else if(args.count("entry")){
         if(args.count("category")){
-          throw std::invalid_argument("Error: missing item argument(s).");
+          std::cerr << "Error: missing item argument(s)." << std::endl;
         } else {
-          throw std::invalid_argument("Error: missing category argument(s).");
+          std::cerr << "Error: missing category argument(s)." << std::endl;
         }
     } else if(args.count("item")){
         if(args.count("category")){
-          std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>()) << std::endl;
+          try{
+            std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>()) << std::endl;
+          } catch(std::exception& ex){
+            std::cerr << ex.what() << std::endl;
+          }
         } else{
-          throw std::invalid_argument("Error: missing category argument(s).");
+          std::cerr << "Error: missing category argument(s)." << std::endl;
         }
     } else if(args.count("category")){
-        std::cout << getJSON(wObj, args["category"].as<std::string>()) << std::endl;
+        try{
+          std::cout << getJSON(wObj, args["category"].as<std::string>()) << std::endl;
+        } catch(std::exception& ex){
+          std::cerr << ex.what() << std::endl;
+        }
     } else{
-        throw std::invalid_argument("Invalid arguments idk wtf has happened lmao");
+        std::cerr << "Error: Invalid arguments somewhere." << std::endl;
     }
     break;
 
@@ -239,5 +255,7 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
   
   json j = wObj.getCategory(c).getItem(i).getEntry(e);
   auto it = j.begin();
-  return it.value().dump();
+  std::string s = it.value().dump();
+  s.erase(std::remove(s.begin(), s.end(), '"'), s.end());
+  return s;
 }

@@ -13,8 +13,9 @@
 #include <string>
 #include <unordered_map>
 
-#include "371pass.h"
 #include "lib_cxxopts.hpp"
+
+#include "371pass.h"
 #include "wallet.h"
 
 // TODO Complete this function. You have been provided some skeleton code which
@@ -29,18 +30,20 @@
 //
 // Some commented out code has been provided. Using some of this will be
 // demonstrated in the coursework video on Canvas. Remember, this coursework is
-// meant to be challenging and testing your understanding of programming in C++.
-// Part of the challenge is figuring things out on your own. That is a major
-// part of software development.
+// meant to be challenging and testing your understanding of programming in
+// C++. Part of the challenge is figuring things out on your own. That is a
+// major part of software development.
 //
 // Example:
 //  int main(int argc, char *argv[]) { return App::run(argc, argv); }
-int App::run(int argc, char *argv[]) {
+int App::run(int argc, char *argv[])
+{
   auto options = App::cxxoptsSetup();
   auto args = options.parse(argc, argv);
 
   // Print the help usage if requested
-  if (args.count("help")) {
+  if (args.count("help"))
+  {
     std::cout << options.help() << '\n';
     return 0;
   }
@@ -52,76 +55,135 @@ int App::run(int argc, char *argv[]) {
   wObj.load(db);
 
   const Action a = parseActionArgument(args);
-  switch (a) {
+  switch (a)
+  {
   case Action::CREATE:
-    if(args.count("category") && args.count("item") && args.count("entry")) {
-      //entry filter
+    if (args.count("category") && args.count("item") &&
+        args.count("entry"))
+    { // adding unique entry
+
       Category _c(args["category"].as<std::string>());
       Item _i(args["item"].as<std::string>());
+
       std::string _e = args["entry"].as<std::string>();
       std::string delimiter = ",";
       std::string _key;
       std::string _value;
-    
+
       size_t pos = _e.find(delimiter);
       _key = _e.substr(0, pos);
-      _value = _e.substr(pos + 1, _e.length()-1);
+      _value = _e.substr(pos + 1, _e.length() - 1);
       _i.addEntry(_key, _value);
+
       _c.addItem(_i);
       wObj.addCategory(_c);
-
-    } else{
-        std::cerr << "Error: missing category, item or entry argument(s)." << std::endl;
-        return 1;
     }
-    break;  
+    else if (args.count("category") &&
+             args.count("item"))
+    { // adding unique item
+      Category _c(args["category"].as<std::string>());
+      Item _i(args["item"].as<std::string>());
+      _c.addItem(_i);
+      wObj.addCategory(_c);
+    }
+    else if (args.count("category") &&
+             !args.count("entry"))
+    { // adding unique category
+      Category _c(args["category"].as<std::string>());
+      wObj.addCategory(_c);
+    }
+    else
+    {
+      std::cerr << "Error: missing category, item or entry argument(s)."
+                << std::endl;
+      return 1;
+    }
+
+    break;
 
   case Action::READ:
-    if(!args.count("category") && !args.count("item") && !args.count("entry")) {
-      try{
+    if (!args.count("category") && !args.count("item") &&
+        !args.count("entry"))
+    {
+      try
+      {
         std::cout << getJSON(wObj) << std::endl;
-      } catch(std::exception& ex){
+      }
+      catch (std::exception &ex)
+      {
         std::cerr << ex.what() << std::endl;
         return 1;
       }
-    } else if(args.count("category") && args.count("item") && args.count("entry")) {
-      //entry filter
-      try{
-        std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>(), args["entry"].as<std::string>()) << std::endl;
-      } catch(std::exception& ex){
+    }
+    else if (args.count("category") && args.count("item") &&
+             args.count("entry"))
+    {
+      // entry filter
+      try
+      {
+        std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                             args["item"].as<std::string>(),
+                             args["entry"].as<std::string>())
+                  << std::endl;
+      }
+      catch (std::exception &ex)
+      {
         std::cerr << ex.what() << std::endl;
         return 1;
       }
-    } else if(args.count("entry")){
-        if(args.count("category")){
-          std::cerr << "Error: missing item argument(s)." << std::endl;
-          return 1;
-        } else {
-          std::cerr << "Error: missing category argument(s)." << std::endl;
-          return 1;
+    }
+    else if (args.count("entry"))
+    {
+      if (args.count("category"))
+      {
+        std::cerr << "Error: missing item argument(s)." << std::endl;
+        return 1;
+      }
+      else
+      {
+        std::cerr << "Error: missing category argument(s)." << std::endl;
+        return 1;
+      }
+    }
+    else if (args.count("item"))
+    {
+      if (args.count("category"))
+      {
+        try
+        {
+          std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                               args["item"].as<std::string>())
+                    << std::endl;
         }
-    } else if(args.count("item")){
-        if(args.count("category")){
-          try{
-            std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>()) << std::endl;
-          } catch(std::exception& ex){
-            std::cerr << ex.what() << std::endl;
-            return 1;
-          }
-        } else{
-          std::cerr << "Error: missing category argument(s)." << std::endl;
-          return 1;
-        }
-    } else if(args.count("category")){
-        try{
-          std::cout << getJSON(wObj, args["category"].as<std::string>()) << std::endl;
-        } catch(std::exception& ex){
+        catch (std::exception &ex)
+        {
           std::cerr << ex.what() << std::endl;
           return 1;
         }
-    } else{
-        std::cerr << "Error: Invalid arguments somewhere." << std::endl;
+      }
+      else
+      {
+        std::cerr << "Error: missing category argument(s)." << std::endl;
         return 1;
+      }
+    }
+    else if (args.count("category"))
+    {
+      try
+      {
+        std::cout << getJSON(wObj, args["category"].as<std::string>())
+                  << std::endl;
+      }
+      catch (std::exception &ex)
+      {
+        std::cerr << ex.what() << std::endl;
+        return 1;
+      }
+    }
+    else
+    {
+      std::cerr << "Error: Invalid arguments somewhere." << std::endl;
+      return 1;
     }
     break;
 
@@ -145,7 +207,8 @@ int App::run(int argc, char *argv[]) {
 // Example:
 //  auto options = App::cxxoptsSetup();
 //  auto args = options.parse(argc, argv);
-cxxopts::Options App::cxxoptsSetup() {
+cxxopts::Options App::cxxoptsSetup()
+{
   cxxopts::Options cxxopts("371pass", "Student ID: " + STUDENT_NUMBER + "\n");
 
   cxxopts.add_options()(
@@ -156,23 +219,27 @@ cxxopts::Options App::cxxoptsSetup() {
       cxxopts::value<std::string>())(
 
       "category",
-      "Apply action to a category (e.g., if you want to add a category, set the"
+      "Apply action to a category (e.g., if you want to add a category, set "
+      "the"
       " action argument to 'add' and the category argument to your chosen"
       " category identifier).",
       cxxopts::value<std::string>())(
 
       "item",
       "Apply action to an item (e.g., if you want to add an item, set the "
-      "action argument to 'add', the category argument to your chosen category "
+      "action argument to 'add', the category argument to your chosen "
+      "category "
       "identifier and the item argument to the item identifier).",
       cxxopts::value<std::string>())(
 
       "entry",
       "Apply action to an entry (e.g., if you want to add an entry, set the "
-      "action argument to 'add', the category argument to your chosen category "
+      "action argument to 'add', the category argument to your chosen "
+      "category "
       "identifier, the item argument to your chosen item identifier, and the "
       "entry argument to the string 'key,value'). If there is no comma, an "
-      "empty entry is inserted. If you are simply retrieving an entry, set the "
+      "empty entry is inserted. If you are simply retrieving an entry, set "
+      "the "
       "entry argument to the 'key'. If you are updating an entry key, use a : "
       "e.g., oldkey:newkey,newvalue.",
       cxxopts::value<std::string>())(
@@ -191,15 +258,23 @@ cxxopts::Options App::cxxoptsSetup() {
 //  auto options = App::cxxoptsSetup();
 //  auto args = options.parse(argc, argv);
 //  App::Action action = parseActionArgument(args);
-App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
+App::Action App::parseActionArgument(cxxopts::ParseResult &args)
+{
   std::string input = args["action"].as<std::string>();
-  if (input == "create"){
+  if (input == "create")
+  {
     return Action::CREATE;
-  } else if (input == "read"){
+  }
+  else if (input == "read")
+  {
     return Action::READ;
-  }else if (input == "update"){
+  }
+  else if (input == "update")
+  {
     return Action::UPDATE;
-  }else if (input == "delete"){
+  }
+  else if (input == "delete")
+  {
     return Action::DELETE;
   }
   throw std::invalid_argument("action");
@@ -216,8 +291,8 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
 // Example:
 //  Wallet wObj{};
 //  std::cout << getJSON(wObj);
-std::string App::getJSON(Wallet &wObj) { 
-  //return "{}";
+std::string App::getJSON(Wallet &wObj)
+{
   return wObj.str();
 }
 
@@ -233,12 +308,12 @@ std::string App::getJSON(Wallet &wObj) {
 //  Wallet wObj{};
 //  std::string c = "category argument value";
 //  std::cout << getJSON(wObj, c);
-std::string App::getJSON(Wallet &wObj, const std::string &c) {
-  //return "{}";
+std::string App::getJSON(Wallet &wObj, const std::string &c)
+{
+
   json j = wObj.getCategory(c);
   auto it = j.begin();
   return it.value().dump();
-  
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -255,11 +330,12 @@ std::string App::getJSON(Wallet &wObj, const std::string &c) {
 //  std::string i = "item argument value";
 //  std::cout << getJSON(wObj, c, i);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
-                         const std::string &i) {
-   //return "{}";
-   json j = wObj.getCategory(c).getItem(i);
-   auto it = j.begin();
-   return it.value().dump();
+                         const std::string &i)
+{
+
+  json j = wObj.getCategory(c).getItem(i);
+  auto it = j.begin();
+  return it.value().dump();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -277,9 +353,9 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
 //  std::string e = "entry argument value";
 //  std::cout << getJSON(wObj, c, i, e);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
-                         const std::string &i, const std::string &e) {
-  //return "{}";
-  
+                         const std::string &i, const std::string &e)
+{
+
   json j = wObj.getCategory(c).getItem(i).getEntry(e);
   auto it = j.begin();
   std::string s = it.value().dump();

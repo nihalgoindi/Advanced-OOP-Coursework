@@ -14,18 +14,21 @@
 // -----------------------------------------------------
 #include <string>
 #include <unordered_map>
+
 #include "lib_json.hpp"
+
 using json = nlohmann::json;
 
 #ifndef ITEM_H
 #define ITEM_H
 
-class Item {
+class Item
+{
 
-   std::string ident;
-   std::unordered_map<std::string, std::string> entries;
-   //std::string key;
-   //std::string value;
+    std::string ident;
+    std::unordered_map<std::string, std::string> entries;
+    // std::string key;
+    // std::string value;
 
 public:
     Item(std::string ident);
@@ -37,9 +40,9 @@ public:
     std::string getEntry(std::string key) const;
     bool deleteEntry(std::string key);
     std::vector<std::string> getKeys() const;
-    friend void to_json(json& j, const Item& i);
-    bool friend operator==(const Item& lhs, const Item& rhs);
+    bool friend operator==(const Item &lhs, const Item &rhs);
     std::string str();
+    friend void to_json(json &j, const Item &i);
 };
 
 #endif // ITEM_H

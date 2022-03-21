@@ -11,14 +11,19 @@
 // -----------------------------------------------------
 #include <string>
 #include <vector>
-#include "item.h"
+
 #include "lib_json.hpp"
+
+#include "item.h"
+
+
 using json = nlohmann::json;
 
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
-class Category {
+class Category
+{
     std::string ident;
     std::vector<Item> itemsVector;
 
@@ -26,16 +31,16 @@ public:
     Category(std::string ident);
     unsigned int size();
     bool empty();
-    void setIdent(std::string ident);
     std::string getIdent() const;
-    Item& newItem(std::string itemIdent);
+    void setIdent(std::string ident);
+    Item &newItem(std::string itemIdent);
     bool addItem(Item item);
-    Item& getItem(std::string itemIdent); //could be const - come back to it later
+    Item &getItem(std::string itemIdent);
     bool deleteItem(std::string itemIdent);
     std::vector<Item> getItems();
-    friend void to_json(json& j, const Category& c);
-    friend bool operator==(const Category& lhs, const Category& rhs);
+    friend bool operator==(const Category &lhs, const Category &rhs);
     std::string str();
+    friend void to_json(json &j, const Category &c);
 };
 
 #endif // CATEGORY_H

@@ -12,27 +12,29 @@
 // -----------------------------------------------------
 #include <string>
 #include <vector>
+
 #include "category.h"
 
 #ifndef WALLET_H
 #define WALLET_H
 
-class Wallet {
+class Wallet
+{
   std::vector<Category> categories;
 
 public:
   Wallet();
   unsigned int size();
   bool empty();
-  Category& newCategory(std::string categoryIdent);
+  Category &newCategory(std::string categoryIdent);
   bool addCategory(Category category);
-  Category& getCategory(std::string categoryIdent);
+  Category &getCategory(std::string categoryIdent);
   bool deleteCategory(std::string categoryIdent);
   void load(std::string dbName);
   void save(std::string filePath);
-  friend void to_json(json& j, const Wallet& w);
-  friend bool operator==(const Wallet& lhs, const Wallet& rhs);
+  friend bool operator==(const Wallet &lhs, const Wallet &rhs);
   std::string str();
+  friend void to_json(json &j, const Wallet &w);
 };
 
 #endif // WALLET_H

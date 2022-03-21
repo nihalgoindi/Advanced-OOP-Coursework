@@ -8,12 +8,12 @@
 // -----------------------------------------------------
 #include <stdexcept>
 #include <vector>
-#include "item.h"
 
+#include "item.h"
 
 // TODO Write a constructor that takes one parameter, a string identifier
 //  and initialises the object and member data.
-Item::Item(std::string ident) : ident(ident){}
+Item::Item(std::string ident) : ident(ident) {}
 //
 // Example:
 //  Item iObj{"identIdent"};
@@ -25,7 +25,8 @@ Item::Item(std::string ident) : ident(ident){}
 //  Item iObj{"identIdent"};
 //  auto size = iObj.size();
 
-unsigned int Item::size(){
+unsigned int Item::size()
+{
     return this->entries.size();
 }
 
@@ -36,8 +37,9 @@ unsigned int Item::size(){
 //  Item iObj{"identIdent"};
 //  auto empty = iObj.empty();
 
-bool Item::empty(){
-    return(size() == 0);
+bool Item::empty()
+{
+    return (size() == 0);
 }
 
 // TODO Write a function, setIdent, that takes one parameter, a string for a new
@@ -47,7 +49,8 @@ bool Item::empty(){
 //  Item iObj{"identIdent"};
 //  iObj.setIdent("identIdent2");
 
-void Item::setIdent(std::string ident){
+void Item::setIdent(std::string ident)
+{
     this->ident = ident;
 }
 
@@ -57,10 +60,10 @@ void Item::setIdent(std::string ident){
 //  Item iObj{"identIdent"};
 //  auto ident = iObj.getIdent();
 
-std::string Item::getIdent() const{
+std::string Item::getIdent() const
+{
     return ident;
 }
-
 
 // TODO Write a function, addEntry, that takes two parameters, an entry
 //  key and value and returns true if the entry was inserted into the
@@ -70,16 +73,19 @@ std::string Item::getIdent() const{
 //  Item iObj{"identIdent"};
 //  iObj.addEntry("key", "value");
 
-bool Item::addEntry(std::string key, std::string value) {
-    if(this->entries.find(key) == this->entries.end()){ //if the key does not exist
+bool Item::addEntry(std::string key, std::string value)
+{
+    if (this->entries.find(key) == this->entries.end())
+    { // if the key does not exist
         this->entries.insert(std::pair<std::string, std::string>(key, value));
         return true;
-    } else {
+    }
+    else
+    {
         this->entries.erase(key);
         this->entries.insert(std::pair<std::string, std::string>(key, value));
         return false;
     }
-
 }
 
 // TODO Write a function, getEntry, that takes one parameter, an entry
@@ -91,10 +97,14 @@ bool Item::addEntry(std::string key, std::string value) {
 //  iObj.addEntry("key", "value");
 //  auto value = iObj.getEntry("key");
 
-std::string Item::getEntry(std::string key) const{
-    if(this->entries.find(key) == this->entries.end()){
+std::string Item::getEntry(std::string key) const
+{
+    if (this->entries.find(key) == this->entries.end())
+    {
         throw std::out_of_range("Error: invalid entry argument(s).");
-    } else{
+    }
+    else
+    {
         return this->entries.at(key);
     }
 }
@@ -108,27 +118,29 @@ std::string Item::getEntry(std::string key) const{
 //  iObj.addEntry("key", "value");
 //  iObj.deleteEntry("key");
 
-bool Item::deleteEntry(std::string key){
-     if(this->entries.find(key) == this->entries.end()){
-         throw std::out_of_range("Error: invalid entry argument(s).");
-         return false;
-    } else{
+bool Item::deleteEntry(std::string key)
+{
+    if (this->entries.find(key) == this->entries.end())
+    {
+        throw std::out_of_range("Error: invalid entry argument(s).");
+        return false;
+    }
+    else
+    {
         this->entries.erase(key);
         return true;
     }
 }
 
-std::vector<std::string> Item::getKeys() const{
+std::vector<std::string> Item::getKeys() const
+{
     std::vector<std::string> keys;
-    for(auto it: entries){
+    for (auto it : entries)
+    {
         keys.push_back(it.first);
     }
     return keys;
 }
-
-
-
-
 
 // TODO Write an == operator overload for the Item class, such that two
 //  Item objects are equal only if they have the same identifier and same
@@ -141,15 +153,17 @@ std::vector<std::string> Item::getKeys() const{
 //  if(iObj1 == iObj2) {
 //    ...
 //  }
-bool operator==(const Item& lhs, const Item& rhs){
-    if((lhs.ident == rhs.ident) && (lhs.entries == rhs.entries)){
+bool operator==(const Item &lhs, const Item &rhs)
+{
+    if ((lhs.ident == rhs.ident) && (lhs.entries == rhs.entries))
+    {
         return true;
-    } else{
+    }
+    else
+    {
         return false;
     }
 }
-
-
 
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Item.
@@ -160,14 +174,17 @@ bool operator==(const Item& lhs, const Item& rhs){
 //  Item iObj{"itemIdent"};
 //  std::string s = iObj.str();
 
-std::string Item::str(){
-    return ((json) *this).dump();
+std::string Item::str()
+{
+    return ((json) * this).dump();
 }
 
-void to_json(json& j, const Item& i){
+void to_json(json &j, const Item &i)
+{
     json entries;
-    for(auto it = i.entries.begin(); it != i.entries.end(); it++) {
+    for (auto it = i.entries.begin(); it != i.entries.end(); it++)
+    {
         entries[it->first] = it->second;
     }
-    j = json{{i.ident,entries}};
+    j = json{{i.ident, entries}};
 }
